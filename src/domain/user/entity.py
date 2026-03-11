@@ -1,8 +1,8 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from src.domain.user.value_objects import Email, Username
+from src.domain.user.value_objects import Email, ExternalIdentityId, Username
 
 
 @dataclass
@@ -10,7 +10,7 @@ class User:
     id: UUID
     email: Email
     username: Username
-    keycloak_id: str
+    external_id: ExternalIdentityId  # IAM provider ID (opaque to domain)
     is_active: bool
     created_at: datetime
     updated_at: datetime
@@ -20,14 +20,14 @@ class User:
         cls,
         email: str,
         username: str,
-        keycloak_id: str,
+        external_id: str,
     ) -> "User":
         now = datetime.utcnow()
         return cls(
             id=uuid4(),
             email=Email(email),
             username=Username(username),
-            keycloak_id=keycloak_id,
+            external_id=ExternalIdentityId(external_id),
             is_active=True,
             created_at=now,
             updated_at=now,

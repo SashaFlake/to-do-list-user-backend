@@ -27,3 +27,21 @@ class Username:
 
     def __str__(self) -> str:
         return self.value
+
+
+@dataclass(frozen=True)
+class ExternalIdentityId:
+    """Opaque external IAM provider identifier (e.g. Keycloak user ID).
+
+    Kept as a value object so the domain is not coupled to any
+    specific provider name, only to the concept of an external identity.
+    """
+
+    value: str
+
+    def __post_init__(self) -> None:
+        if not self.value or not self.value.strip():
+            raise ValueError("ExternalIdentityId cannot be empty")
+
+    def __str__(self) -> str:
+        return self.value

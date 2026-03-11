@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from src.application.user.dto import (
+from app.application.user.dto import (
     LoginDTO,
     RefreshTokenDTO,
     RegisterUserDTO,
@@ -8,11 +8,11 @@ from src.application.user.dto import (
     UpdateUserDTO,
     UserResponseDTO,
 )
-from src.application.user.ports import AbstractKeycloakPort
-from src.domain.user.entity import User
-from src.domain.user.exceptions import UserAlreadyExistsError, UserNotFoundError
-from src.domain.user.repository import AbstractUserRepository
-from src.infrastructure.keycloak.exceptions import (
+from app.application.user.ports import AbstractKeycloakPort
+from app.domain.user.entity import User
+from app.domain.user.exceptions import UserAlreadyExistsError, UserNotFoundError
+from app.domain.user.repository import AbstractUserRepository
+from app.infrastructure.keycloak.exceptions import (
     KeycloakAuthError,
     KeycloakTokenError,
     KeycloakUserAlreadyExistsError,

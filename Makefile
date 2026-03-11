@@ -1,10 +1,10 @@
 .PHONY: dev lint test migrate
 
 dev:
-	uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+	uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 lint:
-	ruff check . && mypy src
+	ruff check . && mypy app
 
 test:
 	pytest tests/ -v

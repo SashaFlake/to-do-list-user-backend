@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from src.domain.user.value_objects import Email, ExternalIdentityId, Username
+from app.domain.user.value_objects import Email, ExternalIdentityId, Username
 
 
 @dataclass
@@ -10,7 +10,7 @@ class User:
     id: UUID
     email: Email
     username: Username
-    external_id: ExternalIdentityId  # IAM provider ID (opaque to domain)
+    external_id: ExternalIdentityId
     is_active: bool
     created_at: datetime
     updated_at: datetime

@@ -31,11 +31,7 @@ class Username:
 
 @dataclass(frozen=True)
 class ExternalIdentityId:
-    """Opaque external IAM provider identifier (e.g. Keycloak user ID).
-
-    Kept as a value object so the domain is not coupled to any
-    specific provider name, only to the concept of an external identity.
-    """
+    """Opaque external IAM provider identifier (e.g. Keycloak user ID)."""
 
     value: str
 

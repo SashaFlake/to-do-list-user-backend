@@ -1,23 +1,23 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from src.api.dependencies import (
+from app.api.dependencies import (
     get_login_use_case,
     get_refresh_use_case,
     get_register_use_case,
 )
-from src.application.user.dto import (
+from app.application.user.dto import (
     LoginDTO,
     RefreshTokenDTO,
     RegisterUserDTO,
     TokenResponseDTO,
     UserResponseDTO,
 )
-from src.application.user.use_cases import (
+from app.application.user.use_cases import (
     LoginUseCase,
     RefreshTokenUseCase,
     RegisterUserUseCase,
 )
-from src.domain.user.exceptions import UserAlreadyExistsError
+from app.domain.user.exceptions import UserAlreadyExistsError
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 

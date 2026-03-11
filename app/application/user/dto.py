@@ -5,7 +5,7 @@ from uuid import UUID
 from pydantic import BaseModel, EmailStr, Field
 
 if TYPE_CHECKING:
-    from src.domain.user.entity import User
+    from app.domain.user.entity import User
 
 
 class RegisterUserDTO(BaseModel):

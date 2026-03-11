@@ -1,9 +1,9 @@
 from keycloak import KeycloakAdmin, KeycloakOpenID
 from keycloak.exceptions import KeycloakAuthenticationError, KeycloakPostError
 
-from src.application.user.dto import TokenResponseDTO
-from src.application.user.ports import AbstractKeycloakPort
-from src.infrastructure.keycloak.exceptions import (
+from app.application.user.dto import TokenResponseDTO
+from app.application.user.ports import AbstractKeycloakPort
+from app.infrastructure.keycloak.exceptions import (
     KeycloakAuthError,
     KeycloakTokenError,
     KeycloakUserAlreadyExistsError,
@@ -89,8 +89,8 @@ class KeycloakAdapter(AbstractKeycloakPort):
         except Exception as exc:
             raise KeycloakTokenError() from exc
 
-    async def delete_user(self, keycloak_id: str) -> None:
-        self._admin.delete_user(keycloak_id)
+    async def delete_user(self, external_id: str) -> None:
+        self._admin.delete_user(external_id)
 
-    async def update_user_email(self, keycloak_id: str, new_email: str) -> None:
-        self._admin.update_user(keycloak_id, {"email": new_email})
+    async def update_user_email(self, external_id: str, new_email: str) -> None:
+        self._admin.update_user(external_id, {"email": new_email})

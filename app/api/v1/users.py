@@ -2,10 +2,10 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from src.api.dependencies import get_get_user_use_case, get_update_use_case
-from src.application.user.dto import UpdateUserDTO, UserResponseDTO
-from src.application.user.use_cases import GetUserUseCase, UpdateUserUseCase
-from src.domain.user.exceptions import UserNotFoundError
+from app.api.dependencies import get_get_user_use_case, get_update_use_case
+from app.application.user.dto import UpdateUserDTO, UserResponseDTO
+from app.application.user.use_cases import GetUserUseCase, UpdateUserUseCase
+from app.domain.user.exceptions import UserNotFoundError
 
 router = APIRouter(prefix="/users", tags=["Users"])
 

@@ -3,10 +3,10 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.user.entity import User
-from src.domain.user.repository import AbstractUserRepository
-from src.domain.user.value_objects import Email, ExternalIdentityId, Username
-from src.infrastructure.db.models import UserModel
+from app.domain.user.entity import User
+from app.domain.user.repository import AbstractUserRepository
+from app.domain.user.value_objects import Email, ExternalIdentityId, Username
+from app.infrastructure.db.models import UserModel
 
 
 class SQLAlchemyUserRepository(AbstractUserRepository):

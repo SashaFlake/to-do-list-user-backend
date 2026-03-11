@@ -1,19 +1,19 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.application.user.ports import AbstractKeycloakPort
-from src.application.user.use_cases import (
+from app.application.user.ports import AbstractKeycloakPort
+from app.application.user.use_cases import (
     GetUserUseCase,
     LoginUseCase,
     RefreshTokenUseCase,
     RegisterUserUseCase,
     UpdateUserUseCase,
 )
-from src.core.config import settings
-from src.domain.user.repository import AbstractUserRepository
-from src.infrastructure.db.session import get_db_session
-from src.infrastructure.db.user_repository import SQLAlchemyUserRepository
-from src.infrastructure.keycloak.adapter import KeycloakAdapter, KeycloakSettings
+from app.core.config import settings
+from app.domain.user.repository import AbstractUserRepository
+from app.infrastructure.db.session import get_db_session
+from app.infrastructure.db.user_repository import SQLAlchemyUserRepository
+from app.infrastructure.keycloak.adapter import KeycloakAdapter, KeycloakSettings
 
 
 def _keycloak_settings() -> KeycloakSettings:

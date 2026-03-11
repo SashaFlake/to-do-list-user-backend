@@ -12,6 +12,11 @@ from src.application.user.ports import AbstractKeycloakPort
 from src.domain.user.entity import User
 from src.domain.user.exceptions import UserAlreadyExistsError, UserNotFoundError
 from src.domain.user.repository import AbstractUserRepository
+from src.infrastructure.keycloak.exceptions import (
+    KeycloakAuthError,
+    KeycloakTokenError,
+    KeycloakUserAlreadyExistsError,
+)
 
 
 class RegisterUserUseCase:
@@ -28,11 +33,14 @@ class RegisterUserUseCase:
         if existing:
             raise UserAlreadyExistsError(dto.email)
 
-        keycloak_id = await self._keycloak.create_user(
-            email=dto.email,
-            username=dto.username,
-            password=dto.password,
-        )
+        try:
+            keycloak_id = await self._keycloak.create_user(
+                email=dto.email,
+                username=dto.username,
+                password=dto.password,
+            )
+        except KeycloakUserAlreadyExistsError:
+            raise UserAlreadyExistsError(dto.email)
 
         user = User.create(
             email=dto.email,
@@ -40,15 +48,7 @@ class RegisterUserUseCase:
             keycloak_id=keycloak_id,
         )
         await self._user_repo.save(user)
-
-        return UserResponseDTO(
-            id=user.id,
-            email=str(user.email),
-            username=str(user.username),
-            is_active=user.is_active,
-            created_at=user.created_at,
-            updated_at=user.updated_at,
-        )
+        return UserResponseDTO.from_entity(user)
 
 
 class LoginUseCase:
@@ -56,7 +56,10 @@ class LoginUseCase:
         self._keycloak = keycloak
 
     async def execute(self, dto: LoginDTO) -> TokenResponseDTO:
-        return await self._keycloak.authenticate(dto.email, dto.password)
+        try:
+            return await self._keycloak.authenticate(dto.email, dto.password)
+        except KeycloakAuthError as exc:
+            raise ValueError("Invalid credentials") from exc
 
 
 class RefreshTokenUseCase:
@@ -64,7 +67,10 @@ class RefreshTokenUseCase:
         self._keycloak = keycloak
 
     async def execute(self, dto: RefreshTokenDTO) -> TokenResponseDTO:
-        return await self._keycloak.refresh_token(dto.refresh_token)
+        try:
+            return await self._keycloak.refresh_token(dto.refresh_token)
+        except KeycloakTokenError as exc:
+            raise ValueError("Invalid or expired refresh token") from exc
 
 
 class GetUserUseCase:
@@ -75,14 +81,7 @@ class GetUserUseCase:
         user = await self._user_repo.get_by_id(user_id)
         if not user:
             raise UserNotFoundError(str(user_id))
-        return UserResponseDTO(
-            id=user.id,
-            email=str(user.email),
-            username=str(user.username),
-            is_active=user.is_active,
-            created_at=user.created_at,
-            updated_at=user.updated_at,
-        )
+        return UserResponseDTO.from_entity(user)
 
 
 class UpdateUserUseCase:
@@ -98,12 +97,4 @@ class UpdateUserUseCase:
             user.update_username(dto.username)
 
         await self._user_repo.update(user)
-
-        return UserResponseDTO(
-            id=user.id,
-            email=str(user.email),
-            username=str(user.username),
-            is_active=user.is_active,
-            created_at=user.created_at,
-            updated_at=user.updated_at,
-        )
+        return UserResponseDTO.from_entity(user)

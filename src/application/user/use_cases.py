@@ -34,7 +34,7 @@ class RegisterUserUseCase:
             raise UserAlreadyExistsError(dto.email)
 
         try:
-            keycloak_id = await self._keycloak.create_user(
+            external_id = await self._keycloak.create_user(
                 email=dto.email,
                 username=dto.username,
                 password=dto.password,
@@ -45,7 +45,7 @@ class RegisterUserUseCase:
         user = User.create(
             email=dto.email,
             username=dto.username,
-            keycloak_id=keycloak_id,
+            external_id=external_id,
         )
         await self._user_repo.save(user)
         return UserResponseDTO.from_entity(user)

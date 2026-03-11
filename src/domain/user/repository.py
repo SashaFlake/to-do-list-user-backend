@@ -14,7 +14,7 @@ class AbstractUserRepository(ABC):
         ...
 
     @abstractmethod
-    async def get_by_keycloak_id(self, keycloak_id: str) -> User | None:
+    async def get_by_external_id(self, external_id: str) -> User | None:
         ...
 
     @abstractmethod

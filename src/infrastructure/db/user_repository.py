@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.domain.user.entity import User
 from src.domain.user.repository import AbstractUserRepository
-from src.domain.user.value_objects import Email, Username
+from src.domain.user.value_objects import Email, ExternalIdentityId, Username
 from src.infrastructure.db.models import UserModel
 
 
@@ -27,9 +27,9 @@ class SQLAlchemyUserRepository(AbstractUserRepository):
         model = result.scalar_one_or_none()
         return self._to_entity(model) if model else None
 
-    async def get_by_keycloak_id(self, keycloak_id: str) -> User | None:
+    async def get_by_external_id(self, external_id: str) -> User | None:
         result = await self._session.execute(
-            select(UserModel).where(UserModel.keycloak_id == keycloak_id)
+            select(UserModel).where(UserModel.external_id == external_id)
         )
         model = result.scalar_one_or_none()
         return self._to_entity(model) if model else None
@@ -39,7 +39,7 @@ class SQLAlchemyUserRepository(AbstractUserRepository):
             id=user.id,
             email=str(user.email),
             username=str(user.username),
-            keycloak_id=user.keycloak_id,
+            external_id=str(user.external_id),
             is_active=user.is_active,
             created_at=user.created_at,
             updated_at=user.updated_at,
@@ -64,7 +64,7 @@ class SQLAlchemyUserRepository(AbstractUserRepository):
             id=model.id,
             email=Email(model.email),
             username=Username(model.username),
-            keycloak_id=model.keycloak_id,
+            external_id=ExternalIdentityId(model.external_id),
             is_active=model.is_active,
             created_at=model.created_at,
             updated_at=model.updated_at,

@@ -1,13 +1,11 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.dependencies import get_user_repository
+from src.api.dependencies import get_get_user_use_case, get_update_use_case
 from src.application.user.dto import UpdateUserDTO, UserResponseDTO
 from src.application.user.use_cases import GetUserUseCase, UpdateUserUseCase
 from src.domain.user.exceptions import UserNotFoundError
-from src.infrastructure.db.session import get_db_session
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -19,9 +17,8 @@ router = APIRouter(prefix="/users", tags=["Users"])
 )
 async def get_user(
     user_id: UUID,
-    session: AsyncSession = Depends(get_db_session),
+    use_case: GetUserUseCase = Depends(get_get_user_use_case),
 ) -> UserResponseDTO:
-    use_case = GetUserUseCase(user_repo=get_user_repository(session))
     try:
         return await use_case.execute(user_id)
     except UserNotFoundError as exc:
@@ -36,9 +33,8 @@ async def get_user(
 async def update_user(
     user_id: UUID,
     dto: UpdateUserDTO,
-    session: AsyncSession = Depends(get_db_session),
+    use_case: UpdateUserUseCase = Depends(get_update_use_case),
 ) -> UserResponseDTO:
-    use_case = UpdateUserUseCase(user_repo=get_user_repository(session))
     try:
         return await use_case.execute(user_id, dto)
     except UserNotFoundError as exc:

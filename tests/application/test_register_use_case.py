@@ -2,9 +2,9 @@ from unittest.mock import AsyncMock
 from uuid import uuid4
 import pytest
 
-from src.application.user.dto import RegisterUserDTO
-from src.application.user.use_cases import RegisterUserUseCase
-from src.domain.user.exceptions import UserAlreadyExistsError
+from app.application.user.dto import RegisterUserDTO
+from app.application.user.use_cases import RegisterUserUseCase
+from app.domain.user.exceptions import UserAlreadyExistsError
 
 
 @pytest.mark.asyncio
@@ -25,7 +25,7 @@ async def test_register_user_success() -> None:
 @pytest.mark.asyncio
 async def test_register_user_duplicate_raises() -> None:
     repo = AsyncMock()
-    repo.get_by_email.return_value = object()  # simulate existing user
+    repo.get_by_email.return_value = object()
     keycloak = AsyncMock()
 
     use_case = RegisterUserUseCase(user_repo=repo, keycloak=keycloak)

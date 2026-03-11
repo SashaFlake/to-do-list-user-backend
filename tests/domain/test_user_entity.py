@@ -1,13 +1,13 @@
 import pytest
-from src.domain.user.entity import User
-from src.domain.user.value_objects import Email, Username
+from app.domain.user.entity import User
+from app.domain.user.value_objects import Email, Username
 
 
 def test_create_user() -> None:
     user = User.create(
         email="test@example.com",
         username="testuser",
-        keycloak_id="kc-123",
+        external_id="kc-123",
     )
     assert str(user.email) == "test@example.com"
     assert str(user.username) == "testuser"

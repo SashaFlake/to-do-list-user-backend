@@ -1,6 +1,11 @@
-from uuid import UUID
 from datetime import datetime
+from typing import TYPE_CHECKING
+from uuid import UUID
+
 from pydantic import BaseModel, EmailStr, Field
+
+if TYPE_CHECKING:
+    from src.domain.user.entity import User
 
 
 class RegisterUserDTO(BaseModel):
@@ -22,6 +27,17 @@ class UserResponseDTO(BaseModel):
     updated_at: datetime
 
     model_config = {"from_attributes": True}
+
+    @classmethod
+    def from_entity(cls, user: "User") -> "UserResponseDTO":
+        return cls(
+            id=user.id,
+            email=str(user.email),
+            username=str(user.username),
+            is_active=user.is_active,
+            created_at=user.created_at,
+            updated_at=user.updated_at,
+        )
 
 
 class TokenResponseDTO(BaseModel):

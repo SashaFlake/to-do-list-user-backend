@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, UTC
 from uuid import UUID, uuid4
 
 from app.domain.user.value_objects import Email, ExternalIdentityId, Username
@@ -22,7 +22,7 @@ class User:
         username: str,
         external_id: str,
     ) -> "User":
-        now = datetime.utcnow()
+        now = datetime.now(UTC)
         return cls(
             id=uuid4(),
             email=Email(email),
@@ -35,8 +35,8 @@ class User:
 
     def deactivate(self) -> None:
         self.is_active = False
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)
 
     def update_username(self, username: str) -> None:
         self.username = Username(username)
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(UTC)

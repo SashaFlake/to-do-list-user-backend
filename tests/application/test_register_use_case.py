@@ -45,7 +45,7 @@ async def test_register_user_keycloak_duplicate_raises() -> None:
     repo = AsyncMock()
     repo.get_by_email.return_value = None
     keycloak = AsyncMock()
-    keycloak.create_user.side_effect = KeycloakUserAlreadyExistsError()
+    keycloak.create_user.side_effect = KeycloakUserAlreadyExistsError("user@example.com")
 
     use_case = RegisterUserUseCase(user_repo=repo, keycloak=keycloak)
     dto = RegisterUserDTO(email="user@example.com", username="newuser", password="secret123")
